@@ -1,0 +1,8 @@
+local ENTITIES = {
+	PLAYER = "PLAYER",
+	MONSTER = "MONSTER",
+}
+
+return {
+	ENTITIES = ENTITIES,
+}
