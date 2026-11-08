@@ -18,6 +18,10 @@ function Entity:init()
 	error(self.name .. " must implement init.")
 end
 
+function Entity:isEntity(e)
+	return type(e) == table and type(e.name) == string and vector.isvector(e.position) and vector.isvector(e.velocity)
+end
+
 function Entity:__tostring()
 	return self.name
 end
