@@ -14,4 +14,14 @@ function Player:new()
 	return instance
 end
 
+function Player:draw()
+	love.graphics.rectangle("fill", self.position.x, self.position.y, 100, 100)
+end
+
+function Player:update(dt) end
+
+function Player:move(direction, dt)
+	Entity.move(self, direction, dt)
+end
+
 return Player
