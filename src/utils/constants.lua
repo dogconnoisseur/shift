@@ -3,16 +3,23 @@ local ENTITIES = {
 	MONSTER = "MONSTER",
 }
 
--- https://lospec.com/palette-list/fluffy8
 local COLORS = {
-	RED0 = "#933a63",
-	RED1 = "#ff95b1",
-	RED2 = "#ffc4cf",
-	WHITE = "#ffecf0",
-	BLUE0 = "#44387a",
-	BLUE1 = "#7679db",
-	BLUE2 = "#96b3fd",
-	BLUE3 = "#d4d5f6",
+	-- https://lospec.com/palette-list/fluffy8
+	ENTITY = {
+		RED0 = "#933a63",
+		RED1 = "#ff95b1",
+		RED2 = "#ffc4cf",
+		WHITE = "#ffecf0",
+		BLUE0 = "#44387a",
+		BLUE1 = "#7679db",
+		BLUE2 = "#96b3fd",
+		BLUE3 = "#d4d5f6",
+	},
+	--	https://lospec.com/palette-list/pastelito2
+	BACKGROUND = {
+		DARK = "#4b475c",
+		LIGHT = "#d7dedc",
+	},
 }
 
 return {
