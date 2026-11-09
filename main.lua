@@ -27,7 +27,7 @@ function love.load()
 
 	love.graphics.setCanvas(canvas)
 
-	love.graphics.clear(helpers.hexToRGB(constants.COLORS.BLUE0))
+	love.graphics.clear(helpers.hexToRGB(constants.COLORS.ENTITY.BLUE0))
 	love.graphics.setCanvas()
 end
 

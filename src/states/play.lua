@@ -2,12 +2,15 @@ local vector = require("lib.hump.vector")
 
 local Player = require("src.entities.player")
 local Monster = require("src.entities.monster")
+local Map = require("src.map")
+local level1 = require("src.levels.level_1")
 
 local play = {}
 
 local input
 local player
 local monster
+local map
 function play:enter()
 	local baton = require("lib.baton")
 
@@ -27,6 +30,10 @@ function play:enter()
 
 	player = Player:new()
 	monster = Monster:new()
+
+	map = Map:new()
+	map:init(level1.width, level1.height, level1.entities, level1.cells)
+	print(map)
 end
 
 function play:update(dt)
