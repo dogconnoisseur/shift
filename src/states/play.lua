@@ -1,5 +1,6 @@
 local vector = require("lib.hump.vector")
 
+local Constants = require("src.utils.constants")
 local Player = require("src.entities.player")
 local Monster = require("src.entities.monster")
 local Map = require("src.map")
@@ -11,6 +12,8 @@ local input
 local player
 local monster
 local map
+
+local intendedMove
 function play:enter()
 	local baton = require("lib.baton")
 
@@ -21,9 +24,10 @@ function play:enter()
 			up = { "key:up", "key:w" },
 			down = { "key:down", "key:s" },
 			pause = { "key:escape" },
+			move = { "key:return" },
 		},
 		pairs = {
-			move = { "left", "right", "up", "down" },
+			intendedMove = { "left", "right", "up", "down" },
 		},
 		joystick = love.joystick.getJoysticks()[1],
 	})
@@ -39,15 +43,22 @@ end
 function play:update(dt)
 	input:update()
 
-	local left = input:get("left")
-	local right = input:get("right")
-	local up = input:get("up")
-	local down = input:get("down")
+	if input:released("left") then
+		intendedMove = Constants.DIRECTIONS.LEFT
+	end
+	if input:released("right") then
+		intendedMove = Constants.DIRECTIONS.RIGHT
+	end
+	if input:released("up") then
+		intendedMove = Constants.DIRECTIONS.UP
+	end
+	if input:released("down") then
+		intendedMove = Constants.DIRECTIONS.DOWN
+	end
 
-	local direction = self:getDirection(left, right, up, down)
-
-	player:move(direction:normalizeInplace(), dt)
-
+	if input:released("move") then
+		print(intendedMove)
+	end
 	if input:released("pause") then
 		Signal.emit("pause")
 	end
@@ -56,10 +67,6 @@ end
 function play:draw()
 	love.graphics.print("play")
 	player:draw()
-end
-
-function play:getDirection(left, right, up, down)
-	return vector.new(right - left, down - up)
 end
 
 return play

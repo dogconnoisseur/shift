@@ -20,8 +20,4 @@ end
 
 function Player:update(dt) end
 
-function Player:move(direction, dt)
-	Entity.move(self, direction, dt)
-end
-
 return Player

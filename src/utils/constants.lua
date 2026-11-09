@@ -1,3 +1,5 @@
+local vector = require("lib.hump.vector")
+
 local ENTITIES = {
 	PLAYER = "PLAYER",
 	MONSTER = "MONSTER",
@@ -22,7 +24,15 @@ local COLORS = {
 	},
 }
 
+local DIRECTIONS = {
+	LEFT = vector(-1, 0),
+	RIGHT = vector(1, 0),
+	UP = vector(0, -1),
+	DOWN = vector(0, 1),
+}
+
 return {
 	ENTITIES = ENTITIES,
 	COLORS = COLORS,
+	DIRECTIONS = DIRECTIONS,
 }
