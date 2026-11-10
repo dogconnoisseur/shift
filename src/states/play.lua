@@ -31,8 +31,9 @@ function play:enter()
 	player = Player:new()
 	monster = Monster:new()
 
+	local entities = { [Constants.ENTITY_IDS.PLAYER] = player, [Constants.ENTITY_IDS.MONSTER] = monster }
 	map = Map:new()
-	map:init(level1.width, level1.height, level1.entities, level1.cells)
+	map:init(level1.width, level1.height, entities, level1.cells)
 end
 
 function play:update(dt)
@@ -45,8 +46,6 @@ end
 
 function play:draw()
 	map:draw()
-
-	player:draw()
 end
 
 return play

@@ -28,7 +28,7 @@ end
 
 function Grid:isEmpty() end
 
-function Grid:draw()
+function Grid:drawGrid()
 	local currentY
 	local currentX
 	for i = 0, #self.cells - 1 do
@@ -55,6 +55,37 @@ function Grid:draw()
 			Constants.CELL_DIMENSIONS.HEIGHT
 		)
 	end
+end
+
+function Grid:drawEntities()
+	for i = 1, self.width * self.height do
+		if self.cellData[i] ~= 0 then
+			local coords = self:getCellCenter(i)
+			self.entities[self.cellData[i]]:draw(coords.x, coords.y)
+		end
+	end
+end
+
+function Grid:getCellCoords(i)
+	i = i - 1
+	local currentX = i % self.width * Constants.CELL_DIMENSIONS.WIDTH
+	local currentY = math.floor(i / self.width) * Constants.CELL_DIMENSIONS.HEIGHT
+	return { x = currentX, y = currentY }
+end
+
+function Grid:getCellCenter(i)
+	local coords = self:getCellCoords(i)
+	local centerX = coords.x + (self.cellWidth / 2)
+	local centerY = coords.y + (self.cellHeight / 2)
+	return { x = centerX, y = centerY }
+end
+
+function Grid:getTotalWidth()
+	return self.width * self.cellWidth
+end
+
+function Grid:getTotalHeight()
+	return self.height * self.cellHeight
 end
 
 function Grid:__tostring()

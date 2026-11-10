@@ -4,7 +4,7 @@ local Constants = require("src.utils.constants")
 local Player = {}
 Player.__index = Player
 
-setmetatable(Player, getmetatable(Entity))
+setmetatable(Player, Entity)
 
 function Player:new()
 	local instance = Entity.new(self, Constants.ENTITIES.PLAYER)
@@ -14,8 +14,8 @@ function Player:new()
 	return instance
 end
 
-function Player:draw()
-	love.graphics.rectangle("fill", self.position.x, self.position.y, 100, 100)
+function Player:draw(x, y)
+	love.graphics.rectangle("fill", x, y, 5, 5)
 end
 
 function Player:update(dt) end

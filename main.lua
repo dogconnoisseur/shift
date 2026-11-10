@@ -10,6 +10,8 @@ local constants = require("src.utils.constants")
 
 local canvas
 function love.load()
+	love.graphics.setDefaultFilter("nearest", "nearest")
+
 	GameState.registerEvents()
 	GameState.switch(menu)
 

@@ -21,15 +21,15 @@ function Map:init(width, height, entities, cellData)
 
 	local screenWidth = love.graphics.getWidth()
 	local screenHeight = love.graphics.getHeight()
-	local levelWidth = self.grid.width
-	local levelHeight = self.grid.height
+	local levelWidth = self.grid:getTotalWidth()
+	local levelHeight = self.grid:getTotalHeight()
 
 	local scaleX = screenWidth / levelWidth
 	local scaleY = screenHeight / levelHeight
-	scale = math.min(scaleX, scaleY)
+	scale = math.floor(math.min(scaleX, scaleY))
 
-	offsetX = (screenWidth - (levelWidth * scale) / 2)
-	offsetY = (screenHeight - (levelHeight * scale) / 2)
+	offsetX = (screenWidth - (levelWidth * scale)) / 2
+	offsetY = (screenHeight - (levelHeight * scale)) / 2
 end
 
 function Map:moveEntity(direction) end
@@ -37,9 +37,11 @@ function Map:moveEntity(direction) end
 function Map:draw()
 	love.graphics.push()
 	love.graphics.translate(offsetX, offsetY)
+
 	love.graphics.scale(scale, scale)
 
-	self.grid:draw()
+	self.grid:drawGrid()
+	self.grid:drawEntities()
 	love.graphics.pop()
 end
 
