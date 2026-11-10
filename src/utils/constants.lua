@@ -5,6 +5,16 @@ local ENTITIES = {
 	MONSTER = "MONSTER",
 }
 
+local ENTITY_IDS = {
+	PLAYER = 1,
+	MONSTER = 2,
+}
+
+local CELL_DIMENSIONS = {
+	WIDTH = 16,
+	HEIGHT = 16,
+}
+
 local COLORS = {
 	-- https://lospec.com/palette-list/fluffy8
 	ENTITY = {
@@ -35,4 +45,6 @@ return {
 	ENTITIES = ENTITIES,
 	COLORS = COLORS,
 	DIRECTIONS = DIRECTIONS,
+	ENTITY_IDS = ENTITY_IDS,
+	CELL_DIMENSIONS = CELL_DIMENSIONS,
 }

@@ -13,7 +13,6 @@ local player
 local monster
 local map
 
-local intendedMove
 function play:enter()
 	local baton = require("lib.baton")
 
@@ -24,11 +23,8 @@ function play:enter()
 			up = { "key:up", "key:w" },
 			down = { "key:down", "key:s" },
 			pause = { "key:escape" },
-			move = { "key:return" },
 		},
-		pairs = {
-			intendedMove = { "left", "right", "up", "down" },
-		},
+		pairs = {},
 		joystick = love.joystick.getJoysticks()[1],
 	})
 
@@ -37,35 +33,19 @@ function play:enter()
 
 	map = Map:new()
 	map:init(level1.width, level1.height, level1.entities, level1.cells)
-	print(map)
 end
 
 function play:update(dt)
 	input:update()
 
-	if input:released("left") then
-		intendedMove = Constants.DIRECTIONS.LEFT
-	end
-	if input:released("right") then
-		intendedMove = Constants.DIRECTIONS.RIGHT
-	end
-	if input:released("up") then
-		intendedMove = Constants.DIRECTIONS.UP
-	end
-	if input:released("down") then
-		intendedMove = Constants.DIRECTIONS.DOWN
-	end
-
-	if input:released("move") then
-		print(intendedMove)
-	end
 	if input:released("pause") then
 		Signal.emit("pause")
 	end
 end
 
 function play:draw()
-	love.graphics.print("play")
+	map:draw()
+
 	player:draw()
 end
 

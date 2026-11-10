@@ -7,8 +7,7 @@ function Entity.new(self, name)
 
 	instance.name = name
 	instance.sight = nil
-	instance.position = vector(0, 0)
-	instance.movementSpeed = 100
+	instance.position = vector(400, 400)
 
 	setmetatable(instance, self)
 	return instance
@@ -22,9 +21,8 @@ function Entity:isEntity(e)
 	return type(e) == table and type(e.name) == string and vector.isvector(e.position) and vector.isvector(e.velocity)
 end
 
-function Entity:move(v, dt)
-	self.position =
-		vector.new(self.position.x + (self.movementSpeed * dt) * v.x, self.position.y + (self.movementSpeed * dt) * v.y)
+function Entity:move(d)
+	self.position = vector.new(self.position.x + d.x, self.position.y + d.y)
 end
 
 function Entity:update(dt)
