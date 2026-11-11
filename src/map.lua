@@ -30,6 +30,8 @@ function Map:init(width, height, entities, cellData)
 
 	offsetX = (screenWidth - (levelWidth * scale)) / 2
 	offsetY = (screenHeight - (levelHeight * scale)) / 2
+
+	print(self.grid:isValidMoveCell(10, 9))
 end
 
 function Map:moveEntity(direction) end

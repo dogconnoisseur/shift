@@ -61,9 +61,28 @@ function Grid:drawEntities()
 	for i = 1, self.width * self.height do
 		if self.cellData[i] ~= 0 then
 			local coords = self:getCellCenter(i)
-			self.entities[self.cellData[i]]:draw(coords.x, coords.y)
+			local entity = self:getEntity(i)
+			entity:draw(coords.x, coords.y)
 		end
 	end
+end
+
+function Grid:moveEntity(d, i) end
+
+function Grid:moveRight(i) end
+
+function Grid:isValidMoveCell(start, target)
+	start = start - 1
+	target = target - 1
+	return target > 0
+		and (
+			math.floor(start / self.width) == math.floor(target / self.width)
+			or start % self.width == target % self.width
+		)
+end
+
+function Grid:getEntity(i)
+	return self.entities[self.cellData[i]]
 end
 
 function Grid:getCellCoords(i)
