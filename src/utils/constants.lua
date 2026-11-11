@@ -1,5 +1,10 @@
 local vector = require("lib.hump.vector")
 
+local TURNS = {
+	PLAYERTURN = "PLAYERTURN",
+	MONSTERTURN = "MONSTERTURN",
+}
+
 local ENTITIES = {
 	PLAYER = "PLAYER",
 	MONSTER = "MONSTER",
@@ -47,4 +52,5 @@ return {
 	DIRECTIONS = DIRECTIONS,
 	ENTITY_IDS = ENTITY_IDS,
 	CELL_DIMENSIONS = CELL_DIMENSIONS,
+	TURNS = TURNS,
 }

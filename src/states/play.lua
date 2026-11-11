@@ -1,6 +1,7 @@
 local vector = require("lib.hump.vector")
 
 local Constants = require("src.utils.constants")
+local Helpers = require("src.utils.helpers")
 local Player = require("src.entities.player")
 local Monster = require("src.entities.monster")
 local Map = require("src.map")
@@ -8,13 +9,37 @@ local level1 = require("src.levels.level_1")
 
 local play = {}
 
+local spriteSheet
+local quads = {}
+
 local input
 local player
 local monster
 local map
+local turn = Constants.TURNS.PLAYERTURN
 
-local playerMove
+local moveDirection
 function play:enter()
+	local frameWidth, frameHeight = 16, 16
+
+	spriteSheet = love.graphics.newImage("assets/player-idle-Sheet.png")
+	local sheetWidth, sheetHeight = spriteSheet:getDimensions()
+
+	local columns = sheetWidth / frameWidth
+	for i = 0, columns - 1 do
+		table.insert(
+			quads,
+			love.graphics.newQuad(
+				i * frameWidth, -- X position moves 16 pixels right per frame
+				0, -- Y position (assumes row 1)
+				frameWidth,
+				frameHeight,
+				sheetWidth,
+				sheetHeight
+			)
+		)
+	end
+
 	local baton = require("lib.baton")
 
 	input = baton.new({
@@ -30,7 +55,7 @@ function play:enter()
 		joystick = love.joystick.getJoysticks()[1],
 	})
 
-	player = Player:new()
+	player = Player:new(quads, spriteSheet)
 	monster = Monster:new()
 
 	local entities = { [Constants.ENTITY_IDS.PLAYER] = player, [Constants.ENTITY_IDS.MONSTER] = monster }
@@ -39,27 +64,39 @@ function play:enter()
 end
 
 function play:update(dt)
+	-- player:update(dt)
+
 	input:update()
 
-	local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
+	if turn == Constants.TURNS.PLAYERTURN then
+		if input:released("right") then
+			moveDirection = Constants.DIRECTIONS.RIGHT
+		end
+		if input:released("left") then
+			moveDirection = Constants.DIRECTIONS.LEFT
+		end
 
-	if input:released("right") then
-		playerMove = map.grid:moveEntity(Constants.DIRECTIONS.RIGHT, entityCell)
-	end
-	if input:released("left") then
-		playerMove = map.grid:moveEntity(Constants.DIRECTIONS.LEFT, entityCell)
-	end
+		if input:released("up") then
+			moveDirection = Constants.DIRECTIONS.UP
+		end
+		if input:released("down") then
+			moveDirection = Constants.DIRECTIONS.DOWN
+		end
 
-	if input:released("up") then
-		playerMove = map.grid:moveEntity(Constants.DIRECTIONS.UP, entityCell)
-	end
-	if input:released("down") then
-		playerMove = map.grid:moveEntity(Constants.DIRECTIONS.DOWN, entityCell)
-	end
+		if input:released("next") then
+			print("XD")
+			local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
+			local moved = map.grid:moveEntity(moveDirection, entityCell)
 
-	if input:released("next") then
-		print(playerMove)
-		playerMove = nil
+			moveDirection = nil
+			if moved then
+				turn = Constants.TURNS.MONSTERTURN
+			end
+		end
+	else
+		if input:released("next") then
+			turn = Constants.TURNS.PLAYERTURN
+		end
 	end
 
 	if input:released("pause") then
@@ -68,6 +105,12 @@ function play:update(dt)
 end
 
 function play:draw()
+	love.graphics.setColor(Helpers.hexToRGB(Constants.COLORS.ENTITY.WHITE))
+	if turn == Constants.TURNS.PLAYERTURN then
+		love.graphics.print("PLAYER TURN")
+	else
+		love.graphics.print("MONSTER TURN")
+	end
 	map:draw()
 end
 

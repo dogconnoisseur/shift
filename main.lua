@@ -9,6 +9,7 @@ local helpers = require("src.utils.helpers")
 local constants = require("src.utils.constants")
 
 local canvas
+
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
