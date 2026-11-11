@@ -13,8 +13,10 @@ have limitied number of switches
 choose how you move and switch carefully to beat the level
 
 
-player and monster are ai, the user can shift there attention either one of them to help the player make it out alive
+player and monster are ai, the user can shift there attention either one of them to help the player kill the monster
 
 fog of war and limited shifts
+
+you control player movement
 
 items, powerups and spells cards 

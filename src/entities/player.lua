@@ -1,5 +1,6 @@
 local Entity = require("src.entity")
 local Constants = require("src.utils.constants")
+local Helpers = require("src.utils.helpers")
 
 local Player = {}
 Player.__index = Player
@@ -15,6 +16,7 @@ function Player:new()
 end
 
 function Player:draw(x, y)
+	love.graphics.setColor(Helpers.hexToRGB(Constants.COLORS.ENTITY.BLUE0))
 	love.graphics.rectangle("fill", x, y, 5, 5)
 end
 

@@ -77,19 +77,23 @@ function Grid:getEntityCell(entityID)
 end
 
 function Grid:moveEntity(d, i)
+	local target
 	if d == Constants.DIRECTIONS.RIGHT then
-		self:moveRight(i)
+		target = i + 1
+	elseif d == Constants.DIRECTIONS.LEFT then
+		target = i - 1
+	elseif d == Constants.DIRECTIONS.UP then
+		target = i - self.width
+	else
+		target = i + self.width
 	end
-end
-
-function Grid:moveRight(i)
-	if self:isValidMoveCell(i, i + 1) then
+	if self:isValidMoveCell(i, target) then
 		local entity = self.cellData[i]
 		self.cellData[i] = 0
-		self.cellData[i + 1] = entity
-		return true
+		self.cellData[target] = entity
+		return target
 	end
-	return false
+	return nil
 end
 
 function Grid:isValidMoveCell(start, target)
