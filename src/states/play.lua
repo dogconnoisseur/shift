@@ -39,6 +39,12 @@ end
 function play:update(dt)
 	input:update()
 
+	if input:released("right") then
+		print("XD")
+		local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
+		map.grid:moveEntity(Constants.DIRECTIONS.RIGHT, entityCell)
+	end
+
 	if input:released("pause") then
 		Signal.emit("pause")
 	end

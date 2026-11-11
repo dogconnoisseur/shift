@@ -67,14 +67,36 @@ function Grid:drawEntities()
 	end
 end
 
-function Grid:moveEntity(d, i) end
+function Grid:getEntityCell(entityID)
+	for i, v in ipairs(self.cellData) do
+		if v == entityID then
+			return i
+		end
+	end
+	return -1
+end
 
-function Grid:moveRight(i) end
+function Grid:moveEntity(d, i)
+	if d == Constants.DIRECTIONS.RIGHT then
+		self:moveRight(i)
+	end
+end
+
+function Grid:moveRight(i)
+	if self:isValidMoveCell(i, i + 1) then
+		local entity = self.cellData[i]
+		self.cellData[i] = 0
+		self.cellData[i + 1] = entity
+		return true
+	end
+	return false
+end
 
 function Grid:isValidMoveCell(start, target)
 	start = start - 1
 	target = target - 1
 	return target > 0
+		and target < self.width * self.height
 		and (
 			math.floor(start / self.width) == math.floor(target / self.width)
 			or start % self.width == target % self.width
