@@ -16,9 +16,10 @@ function Map:new()
 	return instance
 end
 
-function Map:init(width, height, entities, cellData)
+function Map:init(width, height, entities, cellData, canvas)
 	self.grid = Grid:new(width, height, entities, cellData)
 
+	self.canvas = canvas
 	local screenWidth = love.graphics.getWidth()
 	local screenHeight = love.graphics.getHeight()
 	local levelWidth = self.grid:getTotalWidth()
@@ -30,6 +31,12 @@ function Map:init(width, height, entities, cellData)
 
 	offsetX = (screenWidth - (levelWidth * scale)) / 2
 	offsetY = (screenHeight - (levelHeight * scale)) / 2
+
+	love.graphics.setCanvas(canvas.gridCanvas)
+	love.graphics.clear()
+	love.graphics.setColor(1, 1, 1, 1)
+	self.grid:drawGrid()
+	love.graphics.setCanvas()
 end
 
 function Map:draw()
@@ -37,14 +44,17 @@ function Map:draw()
 	love.graphics.translate(offsetX, offsetY)
 
 	love.graphics.scale(scale, scale)
+	love.graphics.draw(self.canvas.gridCanvas)
 
-	self.grid:drawGrid()
+	-- self.grid:drawGrid()
 	self.grid:drawEntities()
+	self.grid:drawFogGrid()
+
 	love.graphics.pop()
 end
 
 function Map:__tostring()
-	return Grid.__tostring(self.grid)
+	return Grid.__tostring(self)
 end
 
 return Map

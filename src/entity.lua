@@ -46,7 +46,6 @@ function Entity:draw(x, y)
 	love.graphics.setColor(1, 1, 1, 1)
 	local _, _, qWidth, qHeight = self.quads[self.facing][self.currentFrame]:getViewport()
 
-	print(self.currentFrame)
 	love.graphics.draw(
 		self.spriteSheet,
 		self.quads[self.facing][self.currentFrame],

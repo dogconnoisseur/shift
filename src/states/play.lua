@@ -18,6 +18,9 @@ local turn = Constants.TURNS.PLAYERTURN
 local moveDirection
 local moveDirectionText
 function play:enter()
+	self.gridCanvas = love.graphics.newCanvas()
+	self.fogCanvas = love.graphics.newCanvas()
+
 	local frameWidth, frameHeight = 16, 16
 
 	local playerSheet = love.graphics.newImage("shift-assets/player-idle-Sheet.png")
@@ -48,7 +51,13 @@ function play:enter()
 
 	local entities = { [Constants.ENTITY_IDS.PLAYER] = player, [Constants.ENTITY_IDS.MONSTER] = monster }
 	map = Map:new()
-	map:init(level1.width, level1.height, entities, level1.cells)
+	map:init(
+		level1.width,
+		level1.height,
+		entities,
+		level1.cells,
+		{ gridCanvas = self.gridCanvas, fogCanvas = self.fogCanvas }
+	)
 end
 
 function play:update(dt)
@@ -92,6 +101,8 @@ function play:update(dt)
 	else
 		if input:released("next") then
 			turn = Constants.TURNS.PLAYERTURN
+			Helpers.print2dArray(map.grid.fogGrid, 10, 10)
+			print("\n")
 		end
 	end
 
@@ -102,6 +113,7 @@ end
 
 function play:draw()
 	love.graphics.setColor(Helpers.hexToRGB(Constants.COLORS.ENTITY.WHITE))
+
 	if turn == Constants.TURNS.PLAYERTURN then
 		if moveDirectionText then
 			love.graphics.print("move " .. moveDirectionText, 200, 0)
