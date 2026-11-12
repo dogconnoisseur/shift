@@ -27,18 +27,12 @@ function play:enter()
 	local sheetWidth, sheetHeight = spriteSheet:getDimensions()
 
 	local columns = sheetWidth / frameWidth
-	for i = 0, columns - 1 do
-		table.insert(
-			quads,
-			love.graphics.newQuad(
-				i * frameWidth, -- X position moves 16 pixels right per frame
-				0, -- Y position (assumes row 1)
-				frameWidth,
-				frameHeight,
-				sheetWidth,
-				sheetHeight
-			)
-		)
+
+	for i = 1, columns / 2 do
+		quads[i] = {}
+		quads[i][1] = love.graphics.newQuad((i - 1) * frameWidth, 16, frameWidth, frameHeight, sheetWidth, sheetHeight)
+
+		quads[i][2] = love.graphics.newQuad((i + 3) * frameWidth, 16, frameWidth, frameHeight, sheetWidth, sheetHeight)
 	end
 
 	local baton = require("lib.baton")
@@ -66,30 +60,34 @@ function play:enter()
 end
 
 function play:update(dt)
-	-- player:update(dt)
+	player:update(dt)
 
 	input:update()
-
+	print(moveDirection)
 	if turn == Constants.TURNS.PLAYERTURN then
 		if input:released("right") then
-			moveDirection = Constants.DIRECTIONS.RIGHT
+			moveDirection = Constants.DIRECTION_VECTORS.RIGHT
 			moveDirectionText = "RIGHT"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.RIGHT)
 		end
 		if input:released("left") then
-			moveDirection = Constants.DIRECTIONS.LEFT
+			moveDirection = Constants.DIRECTION_VECTORS.LEFT
 			moveDirectionText = "LEFT"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.LEFT)
 		end
 
 		if input:released("up") then
-			moveDirection = Constants.DIRECTIONS.UP
+			moveDirection = Constants.DIRECTION_VECTORS.UP
 			moveDirectionText = "UP"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.UP)
 		end
 		if input:released("down") then
-			moveDirection = Constants.DIRECTIONS.DOWN
+			moveDirection = Constants.DIRECTION_VECTORS.DOWN
 			moveDirectionText = "DOWN"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.DOWN)
 		end
 
-		if input:released("next") then
+		if input:released("next") and moveDirection then
 			local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
 			local moved = map.grid:moveEntity(moveDirection, entityCell)
 

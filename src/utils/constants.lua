@@ -10,11 +10,6 @@ local ENTITIES = {
 	MONSTER = "MONSTER",
 }
 
-local ENTITY_IDS = {
-	PLAYER = 1,
-	MONSTER = 2,
-}
-
 local CELL_DIMENSIONS = {
 	WIDTH = 16,
 	HEIGHT = 16,
@@ -40,17 +35,38 @@ local COLORS = {
 }
 
 local DIRECTIONS = {
+	RIGHT = "RIGHT",
+	LEFT = "LEFT",
+	UP = "UP",
+	DOWN = "DOWN",
+}
+
+local DIRECTION_VECTORS = {
 	LEFT = vector(-1, 0),
 	RIGHT = vector(1, 0),
 	UP = vector(0, -1),
 	DOWN = vector(0, 1),
 }
 
+local ENTITY_IDS = {
+	PLAYER = 1,
+	MONSTER = 2,
+}
+
+local ENTITY_DIRECTION_IDS = {
+	DOWN = 1,
+	UP = 2,
+	RIGHT = 3,
+	LEFT = 4,
+}
+
 return {
 	ENTITIES = ENTITIES,
 	COLORS = COLORS,
+	DIRECTION_VECTORS = DIRECTION_VECTORS,
 	DIRECTIONS = DIRECTIONS,
 	ENTITY_IDS = ENTITY_IDS,
+	ENTITY_DIRECTION_IDS = ENTITY_DIRECTION_IDS,
 	CELL_DIMENSIONS = CELL_DIMENSIONS,
 	TURNS = TURNS,
 }

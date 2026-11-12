@@ -8,7 +8,7 @@ Player.__index = Player
 setmetatable(Player, Entity)
 
 local animTimer = 0
-local frameDuration = 0.1
+local frameDuration = 0.5
 function Player:new(sprite)
 	local instance = Entity.new(self, Constants.ENTITIES.PLAYER, sprite)
 
@@ -22,7 +22,7 @@ function Player:update(dt)
 	if animTimer >= frameDuration then
 		animTimer = animTimer - frameDuration
 		self.currentFrame = self.currentFrame + 1
-		if self.currentFrame > #self.quads then
+		if self.currentFrame > #self.quads[self.facing] then
 			self.currentFrame = 1
 		end
 	end

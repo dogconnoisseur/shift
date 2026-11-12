@@ -79,11 +79,11 @@ end
 
 function Grid:moveEntity(d, i)
 	local target
-	if d == Constants.DIRECTIONS.RIGHT then
+	if d == Constants.DIRECTION_VECTORS.RIGHT then
 		target = i + 1
-	elseif d == Constants.DIRECTIONS.LEFT then
+	elseif d == Constants.DIRECTION_VECTORS.LEFT then
 		target = i - 1
-	elseif d == Constants.DIRECTIONS.UP then
+	elseif d == Constants.DIRECTION_VECTORS.UP then
 		target = i - self.width
 	else
 		target = i + self.width
