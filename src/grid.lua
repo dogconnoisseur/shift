@@ -12,7 +12,9 @@ function Grid:new(width, height, entities, cellData)
 	instance.cellWidth = Constants.CELL_DIMENSIONS.WIDTH
 	instance.cellHeight = Constants.CELL_DIMENSIONS.HEIGHT
 	instance.entities = entities
-	instance.cellData = cellData
+	instance.grid = cellData
+
+	instance.fogGrid = {}
 
 	setmetatable(instance, self)
 	Grid.init(instance)
@@ -20,9 +22,8 @@ function Grid:new(width, height, entities, cellData)
 end
 
 function Grid.init(self)
-	self.cells = {}
 	for i = 1, self.width * self.height do
-		self.cells[i] = 0
+		self.fogGrid[i] = 0
 	end
 end
 
@@ -31,7 +32,7 @@ function Grid:isEmpty() end
 function Grid:drawGrid()
 	local currentY
 	local currentX
-	for i = 0, #self.cells - 1 do
+	for i = 0, #self.grid - 1 do
 		currentX = i % self.width
 		currentY = math.floor(i / self.width)
 		if currentY % 2 == 0 then
@@ -59,7 +60,7 @@ end
 
 function Grid:drawEntities()
 	for i = 1, self.width * self.height do
-		if self.cellData[i] ~= 0 then
+		if self.grid[i] ~= 0 then
 			local coords = self:getCellCenter(i)
 			local entity = self:getEntity(i)
 			entity:draw(coords.x, coords.y)
@@ -68,7 +69,7 @@ function Grid:drawEntities()
 end
 
 function Grid:getEntityCell(entityID)
-	for i, v in ipairs(self.cellData) do
+	for i, v in ipairs(self.grid) do
 		if v == entityID then
 			return i
 		end
@@ -88,9 +89,9 @@ function Grid:moveEntity(d, i)
 		target = i + self.width
 	end
 	if self:isValidMoveCell(i, target) then
-		local entity = self.cellData[i]
-		self.cellData[i] = 0
-		self.cellData[target] = entity
+		local entity = self.grid[i]
+		self.grid[i] = 0
+		self.grid[target] = entity
 		return target
 	end
 	return nil
@@ -107,8 +108,10 @@ function Grid:isValidMoveCell(start, target)
 		)
 end
 
+function Grid:setVisibility(i, show) end
+
 function Grid:getEntity(i)
-	return self.entities[self.cellData[i]]
+	return self.entities[self.grid[i]]
 end
 
 function Grid:getCellCoords(i)
@@ -134,7 +137,7 @@ function Grid:getTotalHeight()
 end
 
 function Grid:__tostring()
-	return "[ " .. table.concat(self.cells, ", ") .. " ]"
+	return "[ " .. table.concat(self.grid, ", ") .. " ]"
 end
 
 return Grid

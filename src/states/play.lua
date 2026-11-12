@@ -19,6 +19,7 @@ local map
 local turn = Constants.TURNS.PLAYERTURN
 
 local moveDirection
+local moveDirectionText
 function play:enter()
 	local frameWidth, frameHeight = 16, 16
 
@@ -55,7 +56,8 @@ function play:enter()
 		joystick = love.joystick.getJoysticks()[1],
 	})
 
-	player = Player:new(quads, spriteSheet)
+	local playerSprite = { spriteSheet = spriteSheet, quads = quads }
+	player = Player:new(playerSprite)
 	monster = Monster:new()
 
 	local entities = { [Constants.ENTITY_IDS.PLAYER] = player, [Constants.ENTITY_IDS.MONSTER] = monster }
@@ -71,24 +73,28 @@ function play:update(dt)
 	if turn == Constants.TURNS.PLAYERTURN then
 		if input:released("right") then
 			moveDirection = Constants.DIRECTIONS.RIGHT
+			moveDirectionText = "RIGHT"
 		end
 		if input:released("left") then
 			moveDirection = Constants.DIRECTIONS.LEFT
+			moveDirectionText = "LEFT"
 		end
 
 		if input:released("up") then
 			moveDirection = Constants.DIRECTIONS.UP
+			moveDirectionText = "UP"
 		end
 		if input:released("down") then
 			moveDirection = Constants.DIRECTIONS.DOWN
+			moveDirectionText = "DOWN"
 		end
 
 		if input:released("next") then
-			print("XD")
 			local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
 			local moved = map.grid:moveEntity(moveDirection, entityCell)
 
 			moveDirection = nil
+			moveDirectionText = nil
 			if moved then
 				turn = Constants.TURNS.MONSTERTURN
 			end
@@ -107,6 +113,9 @@ end
 function play:draw()
 	love.graphics.setColor(Helpers.hexToRGB(Constants.COLORS.ENTITY.WHITE))
 	if turn == Constants.TURNS.PLAYERTURN then
+		if moveDirectionText then
+			love.graphics.print("move " .. moveDirectionText, 200, 0)
+		end
 		love.graphics.print("PLAYER TURN")
 	else
 		love.graphics.print("MONSTER TURN")

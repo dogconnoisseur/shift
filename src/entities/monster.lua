@@ -7,7 +7,7 @@ Monster.__index = Monster
 setmetatable(Monster, Entity)
 
 function Monster:new()
-	local instance = Entity.new(self, Constants.ENTITIES.MONSTER)
+	local instance = Entity.new(self, Constants.ENTITIES.MONSTER, nil)
 
 	setmetatable(instance, self)
 

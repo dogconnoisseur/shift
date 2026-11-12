@@ -9,20 +9,12 @@ setmetatable(Player, Entity)
 
 local animTimer = 0
 local frameDuration = 0.1
-function Player:new(quads, spriteSheet)
-	local instance = Entity.new(self, Constants.ENTITIES.PLAYER)
+function Player:new(sprite)
+	local instance = Entity.new(self, Constants.ENTITIES.PLAYER, sprite)
 
-	instance.currentFrame = 1
-	instance.quads = quads
-	instance.spriteSheet = spriteSheet
 	setmetatable(instance, self)
 
 	return instance
-end
-
-function Player:draw(x, y)
-	love.graphics.setColor(1, 1, 1, 1)
-	love.graphics.draw(self.spriteSheet, self.quads[self.currentFrame], x, y)
 end
 
 function Player:update(dt)
