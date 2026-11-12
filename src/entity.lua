@@ -11,11 +11,11 @@ function Entity.new(self, name, sprite)
 	instance.name = name
 	instance.sight = nil
 	instance.position = vector(400, 400)
-	if sprite then
-		instance.spriteSheet = sprite.spriteSheet
-		instance.quads = sprite.quads
-		instance.currentFrame = 1
-	end
+	instance.spriteSheet = sprite.spriteSheet
+	instance.quads = sprite.quads
+	instance.currentFrame = 1
+	self.animTimer = 0
+	self.frameDuration = 0.5
 
 	instance.facing = Constants.ENTITY_DIRECTION_IDS.DOWN
 
@@ -32,7 +32,14 @@ function Entity:isEntity(e)
 end
 
 function Entity:update(dt)
-	error(self.name .. " must implement update.")
+	self.animTimer = self.animTimer + dt
+	if self.animTimer >= self.frameDuration then
+		self.animTimer = self.animTimer - self.frameDuration
+		self.currentFrame = self.currentFrame + 1
+		if self.currentFrame > #self.quads[self.facing] then
+			self.currentFrame = 1
+		end
+	end
 end
 
 function Entity:draw(x, y)

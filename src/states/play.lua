@@ -9,9 +9,6 @@ local level1 = require("src.levels.level_1")
 
 local play = {}
 
-local spriteSheet
-local quads = {}
-
 local input
 local player
 local monster
@@ -23,17 +20,11 @@ local moveDirectionText
 function play:enter()
 	local frameWidth, frameHeight = 16, 16
 
-	spriteSheet = love.graphics.newImage("assets/player-idle-Sheet.png")
-	local sheetWidth, sheetHeight = spriteSheet:getDimensions()
+	local playerSheet = love.graphics.newImage("assets/player-idle-Sheet.png")
+	local playerQuads = play.getQuads(frameWidth, frameHeight, playerSheet)
 
-	local columns = sheetWidth / frameWidth
-
-	for i = 1, columns / 2 do
-		quads[i] = {}
-		quads[i][1] = love.graphics.newQuad((i - 1) * frameWidth, 16, frameWidth, frameHeight, sheetWidth, sheetHeight)
-
-		quads[i][2] = love.graphics.newQuad((i + 3) * frameWidth, 16, frameWidth, frameHeight, sheetWidth, sheetHeight)
-	end
+	local monsterSheet = love.graphics.newImage("assets/monster-idle-Sheet.png")
+	local monsterQuads = play.getQuads(frameWidth, frameHeight, monsterSheet)
 
 	local baton = require("lib.baton")
 
@@ -50,9 +41,10 @@ function play:enter()
 		joystick = love.joystick.getJoysticks()[1],
 	})
 
-	local playerSprite = { spriteSheet = spriteSheet, quads = quads }
+	local playerSprite = { spriteSheet = playerSheet, quads = playerQuads }
+	local monsterSprite = { spriteSheet = monsterSheet, quads = monsterQuads }
 	player = Player:new(playerSprite)
-	monster = Monster:new()
+	monster = Monster:new(monsterSprite)
 
 	local entities = { [Constants.ENTITY_IDS.PLAYER] = player, [Constants.ENTITY_IDS.MONSTER] = monster }
 	map = Map:new()
@@ -61,9 +53,9 @@ end
 
 function play:update(dt)
 	player:update(dt)
+	monster:update(dt)
 
 	input:update()
-	print(moveDirection)
 	if turn == Constants.TURNS.PLAYERTURN then
 		if input:released("right") then
 			moveDirection = Constants.DIRECTION_VECTORS.RIGHT
@@ -119,6 +111,21 @@ function play:draw()
 		love.graphics.print("MONSTER TURN")
 	end
 	map:draw()
+end
+
+function play.getQuads(frameWidth, frameHeight, spriteSheet)
+	local quads = {}
+	local sheetWidth, sheetHeight = spriteSheet:getDimensions()
+
+	local columns = sheetWidth / frameWidth
+
+	for i = 1, columns / 2 do
+		quads[i] = {}
+		quads[i][1] = love.graphics.newQuad((i - 1) * frameWidth, 16, frameWidth, frameHeight, sheetWidth, sheetHeight)
+
+		quads[i][2] = love.graphics.newQuad((i + 3) * frameWidth, 16, frameWidth, frameHeight, sheetWidth, sheetHeight)
+	end
+	return quads
 end
 
 return play

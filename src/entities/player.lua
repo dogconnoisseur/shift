@@ -17,15 +17,4 @@ function Player:new(sprite)
 	return instance
 end
 
-function Player:update(dt)
-	animTimer = animTimer + dt
-	if animTimer >= frameDuration then
-		animTimer = animTimer - frameDuration
-		self.currentFrame = self.currentFrame + 1
-		if self.currentFrame > #self.quads[self.facing] then
-			self.currentFrame = 1
-		end
-	end
-end
-
 return Player
