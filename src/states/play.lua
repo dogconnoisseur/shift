@@ -20,10 +20,10 @@ local moveDirectionText
 function play:enter()
 	local frameWidth, frameHeight = 16, 16
 
-	local playerSheet = love.graphics.newImage("assets/player-idle-Sheet.png")
+	local playerSheet = love.graphics.newImage("shift-assets/player-idle-Sheet.png")
 	local playerQuads = play.getQuads(frameWidth, frameHeight, playerSheet)
 
-	local monsterSheet = love.graphics.newImage("assets/monster-idle-Sheet.png")
+	local monsterSheet = love.graphics.newImage("shift-assets/monster-idle-Sheet.png")
 	local monsterQuads = play.getQuads(frameWidth, frameHeight, monsterSheet)
 
 	local baton = require("lib.baton")
