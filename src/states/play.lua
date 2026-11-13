@@ -19,6 +19,8 @@ local ability
 local moveDirection
 local moveDirectionText
 function play:enter()
+	self.playerStepTimer = 0
+	self.playerStepDuration = 1
 	self.gridCanvas = love.graphics.newCanvas()
 	self.fogCanvas = love.graphics.newCanvas()
 
@@ -42,11 +44,16 @@ function play:enter()
 
 	local playerIdleSheet = love.graphics.newImage("shift-assets/player-idle-Sheet.png")
 	local playerIdleQuads = play.getQuads(frameWidth, frameHeight, playerIdleSheet)
+	local playerWalkingSheet = love.graphics.newImage("shift-assets/player-walking-Sheet.png")
+	local playerWalkingQuads = play.getQuads(frameWidth, frameHeight, playerWalkingSheet)
 
 	local monsterIdleSheet = love.graphics.newImage("shift-assets/monster-idle-Sheet.png")
 	local monsterIdleQuads = play.getQuads(frameWidth, frameHeight, monsterIdleSheet)
 
-	local playerSprite = { [Constants.PLAYER_STATES.IDLE] = { spriteSheet = playerIdleSheet, quads = playerIdleQuads } }
+	local playerSprite = {
+		[Constants.PLAYER_STATES.IDLE] = { spriteSheet = playerIdleSheet, quads = playerIdleQuads },
+		[Constants.PLAYER_STATES.WALKING] = { spriteSheet = playerWalkingSheet, quads = playerWalkingQuads },
+	}
 	local monsterSprite =
 		{ [Constants.MONSTER_STATES.IDLE] = { spriteSheet = monsterIdleSheet, quads = monsterIdleQuads } }
 	player = Player:new(playerSprite)
@@ -73,9 +80,16 @@ function play:update(dt)
 
 	input:update()
 	if turn == Constants.TURNS.PLAYERTURN then
-		self:playerTurn()
+		self:playerTurn(dt)
 	else
 		self:monsterTurn()
+	end
+	if self.playerStepTimer > 0 then
+		self.playerStepTimer = self.playerStepTimer - dt
+
+		if self.playerStepTimer <= 0 then
+			player:setState(Constants.PLAYER_STATES.IDLE)
+		end
 	end
 
 	if input:released("pause") then
@@ -100,7 +114,7 @@ function play:draw()
 	map:draw()
 end
 
-function play:playerTurn()
+function play:playerTurn(dt)
 	if self.visibleEntity == Constants.ENTITY_IDS.PLAYER then
 		if input:released("right") then
 			moveDirection = Constants.DIRECTION_VECTORS.RIGHT
@@ -143,13 +157,17 @@ function play:playerTurn()
 			if moveDirection and self.visibleEntity == Constants.ENTITY_IDS.PLAYER then
 				local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
 				local moved = map.grid:moveEntity(moveDirection, entityCell)
-
+				if moved then
+					player:setState(Constants.PLAYER_STATES.WALKING)
+					self.playerStepTimer = self.playerStepDuration
+				end
 				moveDirection = nil
 				moveDirectionText = nil
 
 				if moved then
 					turn = Constants.TURNS.MONSTERTURN
 				end
+				moved = nil
 			end
 		end
 	end

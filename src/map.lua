@@ -46,7 +46,6 @@ function Map:draw()
 	love.graphics.scale(scale, scale)
 	love.graphics.draw(self.canvas.gridCanvas)
 
-	-- self.grid:drawGrid()
 	self.grid:drawEntities()
 	self.grid:drawFogGrid()
 
