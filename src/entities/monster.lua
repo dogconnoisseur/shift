@@ -10,6 +10,7 @@ function Monster:new(sprite)
 	local instance = Entity.new(self, Constants.ENTITIES.MONSTER, sprite)
 	instance.grid = {}
 
+	instance.state = Constants.MONSTER_STATES.IDLE
 	setmetatable(instance, self)
 
 	return instance
