@@ -1,11 +1,11 @@
 local helpers = {}
 
-function helpers.hexToRGB(hex)
+function helpers.hexToRGB(hex, defaultAlpha)
 	hex = hex:gsub("#", "")
 	return tonumber("0x" .. hex:sub(1, 2)) / 255,
 		tonumber("0x" .. hex:sub(3, 4)) / 255,
 		tonumber("0x" .. hex:sub(5, 6)) / 255,
-		hex:len() == 8 and tonumber("0x" .. hex:sub(7, 8)) / 255 or 1
+		hex:len() == 8 and tonumber("0x" .. hex:sub(7, 8)) / 255 or (defaultAlpha or 1)
 end
 
 function helpers.print2dArray(flatGrid, width, height)

@@ -178,35 +178,9 @@ function Grid:getVisibleCells(playerIndex, radius)
 	end
 
 	return result
-	-- 	i,
-	-- 	-- r = 1
-	-- 	i + 1,
-	-- 	i - 1,
-	-- 	i + self.width,
-	-- 	i - self.width,
-	-- 	i + self.width + 1,
-	-- 	i + self.width - 1,
-	-- 	i - self.width + 1,
-	-- 	i - self.width - 1,
-	-- 	-- r = 2
-	-- 	i - 2 * self.width,
-	-- 	i - 2 * self.width - 1,
-	-- }
-	-- i - r * self.width + r-1
-	-- i - r * self.width - r-1
-	-- i + r * self.width + r-1
-	-- i + r * self.width - r-1
-	--
-	--i +
-	--
-	-- i - r * self.width - (r- (r1)
-	--
 end
 
 function Grid:isSameRow(i, target)
-	if target < 0 then
-		print(i)
-	end
 	return target > 0
 		and target <= self.width * self.height
 		and math.floor((i - 1) / self.width) == math.floor((target - 1) / self.width)

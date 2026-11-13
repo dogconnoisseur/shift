@@ -8,10 +8,15 @@ setmetatable(Monster, Entity)
 
 function Monster:new(sprite)
 	local instance = Entity.new(self, Constants.ENTITIES.MONSTER, sprite)
+	instance.grid = {}
 
 	setmetatable(instance, self)
 
 	return instance
+end
+
+function Monster:init(grid)
+	self.grid = grid
 end
 
 return Monster

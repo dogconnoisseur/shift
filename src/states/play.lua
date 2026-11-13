@@ -15,6 +15,7 @@ local monster
 local map
 local turn = Constants.TURNS.PLAYERTURN
 
+local ability
 local moveDirection
 local moveDirectionText
 function play:enter()
@@ -39,6 +40,7 @@ function play:enter()
 			down = { "key:down", "key:s" },
 			pause = { "key:escape" },
 			next = { "key:return" },
+			shift = { "key:lshift", "key:rshift" },
 		},
 		pairs = {},
 		joystick = love.joystick.getJoysticks()[1],
@@ -49,6 +51,8 @@ function play:enter()
 	player = Player:new(playerSprite)
 	monster = Monster:new(monsterSprite)
 
+	self.visibleEntity = Constants.ENTITY_IDS.PLAYER
+
 	local entities = { [Constants.ENTITY_IDS.PLAYER] = player, [Constants.ENTITY_IDS.MONSTER] = monster }
 	map = Map:new()
 	map:init(
@@ -58,6 +62,8 @@ function play:enter()
 		level1.cells,
 		{ gridCanvas = self.gridCanvas, fogCanvas = self.fogCanvas }
 	)
+
+	monster:init(map.grid)
 end
 
 function play:update(dt)
@@ -66,44 +72,9 @@ function play:update(dt)
 
 	input:update()
 	if turn == Constants.TURNS.PLAYERTURN then
-		if input:released("right") then
-			moveDirection = Constants.DIRECTION_VECTORS.RIGHT
-			moveDirectionText = "RIGHT"
-			player:setFacing(Constants.ENTITY_DIRECTION_IDS.RIGHT)
-		end
-		if input:released("left") then
-			moveDirection = Constants.DIRECTION_VECTORS.LEFT
-			moveDirectionText = "LEFT"
-			player:setFacing(Constants.ENTITY_DIRECTION_IDS.LEFT)
-		end
-
-		if input:released("up") then
-			moveDirection = Constants.DIRECTION_VECTORS.UP
-			moveDirectionText = "UP"
-			player:setFacing(Constants.ENTITY_DIRECTION_IDS.UP)
-		end
-		if input:released("down") then
-			moveDirection = Constants.DIRECTION_VECTORS.DOWN
-			moveDirectionText = "DOWN"
-			player:setFacing(Constants.ENTITY_DIRECTION_IDS.DOWN)
-		end
-
-		if input:released("next") and moveDirection then
-			local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
-			local moved = map.grid:moveEntity(moveDirection, entityCell)
-
-			moveDirection = nil
-			moveDirectionText = nil
-			if moved then
-				turn = Constants.TURNS.MONSTERTURN
-			end
-		end
+		self:playerTurn()
 	else
-		if input:released("next") then
-			turn = Constants.TURNS.PLAYERTURN
-			Helpers.print2dArray(map.grid.fogGrid, 10, 10)
-			print("\n")
-		end
+		self:monsterTurn()
 	end
 
 	if input:released("pause") then
@@ -118,11 +89,83 @@ function play:draw()
 		if moveDirectionText then
 			love.graphics.print("move " .. moveDirectionText, 200, 0)
 		end
+		if ability then
+			love.graphics.print(ability, 400, 0)
+		end
 		love.graphics.print("PLAYER TURN")
 	else
 		love.graphics.print("MONSTER TURN")
 	end
 	map:draw()
+end
+
+function play:playerTurn()
+	if self.visibleEntity == Constants.ENTITY_IDS.PLAYER then
+		if input:released("right") then
+			moveDirection = Constants.DIRECTION_VECTORS.RIGHT
+			moveDirectionText = "RIGHT"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.RIGHT)
+			ability = nil
+		end
+		if input:released("left") then
+			moveDirection = Constants.DIRECTION_VECTORS.LEFT
+			moveDirectionText = "LEFT"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.LEFT)
+			ability = nil
+		end
+
+		if input:released("up") then
+			moveDirection = Constants.DIRECTION_VECTORS.UP
+			moveDirectionText = "UP"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.UP)
+			ability = nil
+		end
+		if input:released("down") then
+			moveDirection = Constants.DIRECTION_VECTORS.DOWN
+			moveDirectionText = "DOWN"
+			player:setFacing(Constants.ENTITY_DIRECTION_IDS.DOWN)
+			ability = nil
+		end
+	end
+	if input:released("shift") then
+		ability = "shift"
+	end
+
+	if input:released("next") and turn == Constants.TURNS.PLAYERTURN then
+		if ability == "shift" then
+			moveDirection = nil
+			moveDirectionText = nil
+			self:shiftAttention()
+			map.grid:setVisibility(map.grid:getEntityCell(self.visibleEntity))
+			ability = nil
+		else
+			if moveDirection and self.visibleEntity == Constants.ENTITY_IDS.PLAYER then
+				local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
+				local moved = map.grid:moveEntity(moveDirection, entityCell)
+
+				moveDirection = nil
+				moveDirectionText = nil
+
+				if moved then
+					turn = Constants.TURNS.MONSTERTURN
+				end
+			end
+		end
+	end
+end
+
+function play:monsterTurn()
+	if input:released("next") then
+		turn = Constants.TURNS.PLAYERTURN
+	end
+end
+
+function play:shiftAttention()
+	if self.visibleEntity == Constants.ENTITY_IDS.PLAYER then
+		self.visibleEntity = Constants.ENTITY_IDS.MONSTER
+	else
+		self.visibleEntity = Constants.ENTITY_IDS.PLAYER
+	end
 end
 
 function play.getQuads(frameWidth, frameHeight, spriteSheet)
