@@ -22,14 +22,6 @@ function play:enter()
 	self.gridCanvas = love.graphics.newCanvas()
 	self.fogCanvas = love.graphics.newCanvas()
 
-	local frameWidth, frameHeight = 16, 16
-
-	local playerSheet = love.graphics.newImage("shift-assets/player-idle-Sheet.png")
-	local playerQuads = play.getQuads(frameWidth, frameHeight, playerSheet)
-
-	local monsterSheet = love.graphics.newImage("shift-assets/monster-idle-Sheet.png")
-	local monsterQuads = play.getQuads(frameWidth, frameHeight, monsterSheet)
-
 	local baton = require("lib.baton")
 
 	input = baton.new({
@@ -46,8 +38,17 @@ function play:enter()
 		joystick = love.joystick.getJoysticks()[1],
 	})
 
-	local playerSprite = { spriteSheet = playerSheet, quads = playerQuads }
-	local monsterSprite = { spriteSheet = monsterSheet, quads = monsterQuads }
+	local frameWidth, frameHeight = 16, 16
+
+	local playerIdleSheet = love.graphics.newImage("shift-assets/player-idle-Sheet.png")
+	local playerIdleQuads = play.getQuads(frameWidth, frameHeight, playerIdleSheet)
+
+	local monsterIdleSheet = love.graphics.newImage("shift-assets/monster-idle-Sheet.png")
+	local monsterIdleQuads = play.getQuads(frameWidth, frameHeight, monsterIdleSheet)
+
+	local playerSprite = { [Constants.PLAYER_STATES.IDLE] = { spriteSheet = playerIdleSheet, quads = playerIdleQuads } }
+	local monsterSprite =
+		{ [Constants.MONSTER_STATES.IDLE] = { spriteSheet = monsterIdleSheet, quads = monsterIdleQuads } }
 	player = Player:new(playerSprite)
 	monster = Monster:new(monsterSprite)
 

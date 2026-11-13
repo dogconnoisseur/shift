@@ -5,30 +5,34 @@ local Constants = require("src.utils.constants")
 local Entity = {}
 Entity.__index = Entity
 
-function Entity.new(self, name, sprite)
-	local instance = {}
+function Entity.new(self, name, sprite, initialState)
+	local instance = setmetatable({}, self)
 
 	instance.name = name
 	instance.sight = nil
 	instance.position = vector(400, 400)
-	instance.spriteSheet = sprite.spriteSheet
-	instance.quads = sprite.quads
+	instance.sprite = sprite
+	instance.state = initialState
+	-- instance.spriteSheet = sprite.spriteSheet
+	-- instance.quads = sprite.idleQuads
 	instance.currentFrame = 1
-	self.animTimer = 0
-	self.frameDuration = 0.5
+	instance.animTimer = 0
+	instance.frameDuration = 0.5
+
+	instance:applyStateSprite()
 
 	instance.facing = Constants.ENTITY_DIRECTION_IDS.DOWN
 
-	setmetatable(instance, self)
 	return instance
 end
 
-function Entity:init()
-	error(self.name .. " must implement init.")
-end
+function Entity:setState(newState)
+	if self.state == newState then
+		return
+	end
 
-function Entity:isEntity(e)
-	return type(e) == table and type(e.name) == string and vector.isvector(e.position) and vector.isvector(e.velocity)
+	self.state = newState
+	self:applyStateSprite()
 end
 
 function Entity:update(dt)
@@ -61,6 +65,18 @@ end
 
 function Entity:setFacing(d)
 	self.facing = d
+end
+
+function Entity:getStateSprite()
+	return self.sprite[self.state]
+end
+
+function Entity:applyStateSprite()
+	local currentStateSprite = self:getStateSprite()
+	if currentStateSprite then
+		self.spriteSheet = currentStateSprite.spriteSheet
+		self.quads = currentStateSprite.quads
+	end
 end
 
 function Entity:__tostring()

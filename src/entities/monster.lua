@@ -7,11 +7,8 @@ Monster.__index = Monster
 setmetatable(Monster, Entity)
 
 function Monster:new(sprite)
-	local instance = Entity.new(self, Constants.ENTITIES.MONSTER, sprite)
+	local instance = Entity.new(self, Constants.ENTITIES.MONSTER, sprite, Constants.MONSTER_STATES.IDLE)
 	instance.grid = {}
-
-	instance.state = Constants.MONSTER_STATES.IDLE
-	setmetatable(instance, self)
 
 	return instance
 end

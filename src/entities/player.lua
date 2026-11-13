@@ -4,17 +4,14 @@ local Helpers = require("src.utils.helpers")
 
 local Player = {}
 Player.__index = Player
-
 setmetatable(Player, Entity)
 
-local animTimer = 0
-local frameDuration = 0.5
 function Player:new(sprite)
-	local instance = Entity.new(self, Constants.ENTITIES.PLAYER, sprite)
-
-	setmetatable(instance, self)
+	local instance = Entity.new(self, Constants.ENTITIES.PLAYER, sprite, Constants.PLAYER_STATES.IDLE)
 
 	return instance
 end
+
+function Player:moveToGrid(targetX, targetY) end
 
 return Player
