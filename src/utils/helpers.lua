@@ -8,11 +8,26 @@ function helpers.hexToRGB(hex, defaultAlpha)
 		hex:len() == 8 and tonumber("0x" .. hex:sub(7, 8)) / 255 or (defaultAlpha or 1)
 end
 
-function helpers.print2dArray(flatGrid, width, height)
+function helpers.print1dArray(flatGrid, width, height)
 	for row = 1, height do
 		local startIdx = (row - 1) * width + 1
 		local endIdx = row * width
 		print(table.concat(flatGrid, " ", startIdx, endIdx))
+	end
+end
+
+function helpers.print2dArray(array, width, height)
+	for y = 1, height do
+		for x = 1, width do
+			if type(array[y][x]) == "table" then
+				for key, value in pairs(array[y][x]) do
+					print(key, tostring(value))
+				end
+			else
+				print(array[y][x])
+			end
+		end
+		print("\n")
 	end
 end
 

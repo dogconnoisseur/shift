@@ -71,7 +71,7 @@ function play:enter()
 		{ gridCanvas = self.gridCanvas, fogCanvas = self.fogCanvas }
 	)
 
-	monster:init(map.grid)
+	monster:init(map.grid.grid, map.grid.width, map.grid.height)
 end
 
 function play:update(dt)

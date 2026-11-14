@@ -39,11 +39,26 @@ AStar.__index = AStar
 function AStar.new(grid, width, height)
 	local instance = setmetatable({}, AStar)
 	instance.grid = grid
-	instance.nodes = AStar.get_nodes_from_grid(grid, width, height)
+
+	instance.nodes = AStar:get_nodes_from_grid(grid, width, height)
 	return instance
 end
 
-function AStar:get_nodes_from_grid(grid, width, height) end
+function AStar:get_nodes_from_grid(grid, width, height)
+	local nodes = {}
+
+	for y = 1, height do
+		nodes[y] = {}
+		for x = 1, width do
+			nodes[y][x] = { x = x, y = y, d = grid[self.get_1d_coords_from_2d(x, y, width)] }
+		end
+	end
+	return nodes
+end
+
+function AStar.get_1d_coords_from_2d(x, y, width)
+	return (y - 1) * width + x
+end
 
 function AStar:dist(x1, y1, x2, y2)
 	return math.sqrt(math.pow(x2 - x1, 2) + math.pow(y2 - y1, 2))
