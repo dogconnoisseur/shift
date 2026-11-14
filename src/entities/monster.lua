@@ -19,4 +19,8 @@ function Monster:init(grid, width, height)
 	self.aStar = AStar.new(grid, width, height)
 end
 
+function Monster:move(target) end
+
+function Monster:getPosition() end
+
 return Monster
