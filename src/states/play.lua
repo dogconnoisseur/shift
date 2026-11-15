@@ -71,7 +71,7 @@ function play:enter()
 		{ gridCanvas = self.gridCanvas, fogCanvas = self.fogCanvas }
 	)
 
-	monster:init(map.grid.grid, map.grid.width, map.grid.height)
+	monster:init(map.grid, map.grid.width, map.grid.height)
 end
 
 function play:update(dt)
@@ -174,6 +174,7 @@ function play:playerTurn(dt)
 end
 
 function play:monsterTurn()
+	monster:track()
 	if input:released("next") then
 		turn = Constants.TURNS.PLAYERTURN
 	end

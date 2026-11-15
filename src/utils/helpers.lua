@@ -31,6 +31,20 @@ function helpers.print2dArray(array, width, height)
 	end
 end
 
+function helpers.printTableOfTables(tbl, indent)
+	indent = indent or 0
+	local pad = string.rep("  ", indent)
+	for k, v in pairs(tbl) do
+		if type(v) == "table" then
+			print(pad .. tostring(k) .. " = {")
+			helpers.printTableOfTables(v, indent + 1)
+			print(pad .. "}")
+		else
+			print(pad .. tostring(k) .. " = " .. tostring(v))
+		end
+	end
+end
+
 function helpers.shallowCopy(orig)
 	local copy = {}
 	for k, v in pairs(orig) do

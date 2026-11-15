@@ -36,7 +36,7 @@ local cachedPaths = nil
 local AStar = {}
 AStar.__index = AStar
 
-function AStar.new(grid, width, height)
+function AStar:new(grid, width, height)
 	local instance = setmetatable({}, AStar)
 	instance.grid = grid
 
@@ -73,8 +73,12 @@ function AStar:heuristic_cost_estimate(nodeA, nodeB)
 end
 
 function AStar:is_valid_node(node, neighbor)
+	local inBounds = node.x > 0 and node.x < self.width and node.y > 0 and node.y < self.height
+
 	return true
 end
+
+function AStar:is_neighbor(node, neighbor) end
 
 function AStar:lowest_f_score(set, f_score)
 	local lowest, bestNode = INF, nil

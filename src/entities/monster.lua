@@ -16,11 +16,31 @@ end
 
 function Monster:init(grid, width, height)
 	self.grid = grid
-	self.aStar = AStar.new(grid, width, height)
+	self.gridWidth = width
+	self.gridHeight = height
+	self.aStar = AStar:new(grid, width, height)
+	self.positon = self.grid:getPosition(Constants.ENTITY_IDS.MONSTER)
 end
 
 function Monster:move(target) end
 
-function Monster:getPosition() end
+function Monster:track()
+	local playerPos = self.grid:getPosition(Constants.ENTITY_IDS.PLAYER)
+	local playerNode = self:getNodeFromGrid(playerPos)
+
+	local monsterNode = self:getNodeFromGrid(self.positon)
+
+	print(self.aStar)
+	local path = self.aStar:a_star(monsterNode, playerNode, self.aStar.nodes)
+	if path then
+		Helpers.printTableOfTables(path)
+	end
+end
+
+function Monster:getNodeFromGrid(i)
+	local x = i % self.gridWidth + 1
+	local y = math.floor(i / self.gridWidth)
+	return self.aStar.nodes[x][y]
+end
 
 return Monster

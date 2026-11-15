@@ -216,6 +216,15 @@ function Grid:getTotalHeight()
 	return self.height * self.cellHeight
 end
 
+function Grid:getPosition(entityID)
+	for i = 1, #self.grid do
+		if self.grid[i] == entityID then
+			return i
+		end
+	end
+	return nil
+end
+
 function Grid:__tostring()
 	return "[ " .. table.concat(self.grid, ", ") .. " ]"
 end
