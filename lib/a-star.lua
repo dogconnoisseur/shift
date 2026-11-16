@@ -29,6 +29,7 @@
 
 local INF = 1 / 0
 local cachedPaths = nil
+local Helpers = require("src.utils.helpers")
 
 ----------------------------------------------------------------
 -- local functions
@@ -39,7 +40,8 @@ AStar.__index = AStar
 function AStar:new(grid, width, height)
 	local instance = setmetatable({}, AStar)
 	instance.grid = grid
-
+	instance.width = width
+	instance.height = height
 	instance.nodes = AStar:get_nodes_from_grid(grid, width, height)
 	return instance
 end
@@ -48,9 +50,9 @@ function AStar:get_nodes_from_grid(grid, width, height)
 	local nodes = {}
 
 	for y = 1, height do
-		nodes[y] = {}
 		for x = 1, width do
-			nodes[y][x] = { x = x, y = y, d = grid[self.get_1d_coords_from_2d(x, y, width)] }
+			local coords = self.get_1d_coords_from_2d(x, y, width)
+			table.insert(nodes, { x = x, y = y, d = grid[coords] })
 		end
 	end
 	return nodes
@@ -73,12 +75,17 @@ function AStar:heuristic_cost_estimate(nodeA, nodeB)
 end
 
 function AStar:is_valid_node(node, neighbor)
-	local inBounds = node.x > 0 and node.x < self.width and node.y > 0 and node.y < self.height
+	local inBounds = neighbor.x > 0 and neighbor.x < self.width and neighbor.y > 0 and neighbor.y < self.height
 
-	return true
+	return inBounds and self:is_neighbor(node, neighbor)
 end
 
-function AStar:is_neighbor(node, neighbor) end
+function AStar:is_neighbor(node, neighbor)
+	local isValidSameRow = node.y == neighbor.y and math.abs(node.x - neighbor.x) <= 1
+	local isValidSameCol = node.x == neighbor.x and math.abs(node.y - neighbor.y) <= 1
+
+	return isValidSameRow or isValidSameCol
+end
 
 function AStar:lowest_f_score(set, f_score)
 	local lowest, bestNode = INF, nil
@@ -93,6 +100,7 @@ end
 
 function AStar:neighbor_nodes(theNode, nodes)
 	local neighbors = {}
+
 	for _, node in ipairs(nodes) do
 		if theNode ~= node and self:is_valid_node(theNode, node) then
 			table.insert(neighbors, node)

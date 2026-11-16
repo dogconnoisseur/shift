@@ -45,6 +45,16 @@ function helpers.printTableOfTables(tbl, indent)
 	end
 end
 
+local printTableCount = 0
+function helpers.printTable(tbl, count)
+	if printTableCount < count then
+		for i, v in pairs(tbl) do
+			print(i, v)
+		end
+	end
+	printTableCount = printTableCount + 1
+end
+
 function helpers.shallowCopy(orig)
 	local copy = {}
 	for k, v in pairs(orig) do

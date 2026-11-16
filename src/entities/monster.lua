@@ -30,7 +30,6 @@ function Monster:track()
 
 	local monsterNode = self:getNodeFromGrid(self.positon)
 
-	print(self.aStar)
 	local path = self.aStar:a_star(monsterNode, playerNode, self.aStar.nodes)
 	if path then
 		Helpers.printTableOfTables(path)
@@ -38,9 +37,10 @@ function Monster:track()
 end
 
 function Monster:getNodeFromGrid(i)
-	local x = i % self.gridWidth + 1
-	local y = math.floor(i / self.gridWidth)
-	return self.aStar.nodes[x][y]
+	-- local x = i % self.gridWidth + 1
+	-- local y = math.floor(i / self.gridWidth)
+	-- return self.aStar.nodes[x][y]
+	return self.aStar.nodes[i]
 end
 
 return Monster
