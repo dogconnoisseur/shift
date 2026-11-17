@@ -22,17 +22,24 @@ function Monster:init(grid, width, height)
 	self.positon = self.grid:getPosition(Constants.ENTITY_IDS.MONSTER)
 end
 
-function Monster:move(target) end
+function Monster:move(target)
+	local node
+	if self.state == Constants.MONSTER_STATES.TRACK then
+		node = self:track()
+	end
+
+	return node.i
+end
 
 function Monster:track()
 	local playerPos = self.grid:getPosition(Constants.ENTITY_IDS.PLAYER)
 	local playerNode = self:getNodeFromGrid(playerPos)
 
-	local monsterNode = self:getNodeFromGrid(self.positon)
-
+	self.position = self.grid:getPosition(Constants.ENTITY_IDS.MONSTER)
+	local monsterNode = self:getNodeFromGrid(self.position)
 	local path = self.aStar:a_star(monsterNode, playerNode, self.aStar.nodes)
 	if path then
-		Helpers.printTableOfTables(path)
+		return path[2]
 	end
 end
 

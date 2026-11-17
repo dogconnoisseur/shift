@@ -62,7 +62,7 @@ local ENTITY_DIRECTION_IDS = {
 
 local MONSTER_STATES = {
 	IDLE = "IDLE",
-	CHASE = "CHASE",
+	TRACK = "TRACK",
 	ATTACK = "ATTACK",
 	FLEE = "FLEE",
 	HEAL = "HEAL",

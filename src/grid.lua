@@ -101,23 +101,15 @@ function Grid:getEntityCell(entityID)
 	return -1
 end
 
-function Grid:moveEntity(d, i)
-	local target
-	if d == Constants.DIRECTION_VECTORS.RIGHT then
-		target = i + 1
-	elseif d == Constants.DIRECTION_VECTORS.LEFT then
-		target = i - 1
-	elseif d == Constants.DIRECTION_VECTORS.UP then
-		target = i - self.width
-	else
-		target = i + self.width
-	end
+function Grid:moveEntity(target, i, entityID)
 	if self:isValidMoveCell(i, target) then
 		local entity = self.grid[i]
 		self.grid[i] = 0
 		self.grid[target] = entity
-		self.fogGrid[target] = entity
-		self:setVisibility(target)
+		if entityID == Constants.ENTITY_IDS.PLAYER then
+			self.fogGrid[target] = entity
+			self:setVisibility(target)
+		end
 		return target
 	end
 	return nil

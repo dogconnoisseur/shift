@@ -52,7 +52,7 @@ function AStar:get_nodes_from_grid(grid, width, height)
 	for y = 1, height do
 		for x = 1, width do
 			local coords = self.get_1d_coords_from_2d(x, y, width)
-			table.insert(nodes, { x = x, y = y, d = grid[coords] })
+			table.insert(nodes, { x = x, y = y, i = coords, d = grid[coords] })
 		end
 	end
 	return nodes

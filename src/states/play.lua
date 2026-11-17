@@ -21,6 +21,9 @@ local moveDirectionText
 function play:enter()
 	self.playerStepTimer = 0
 	self.playerStepDuration = 1
+	self.monsterStepTimer = 0
+	self.monsterStepDuration = 1
+
 	self.gridCanvas = love.graphics.newCanvas()
 	self.fogCanvas = love.graphics.newCanvas()
 
@@ -92,6 +95,14 @@ function play:update(dt)
 		end
 	end
 
+	if self.monsterStepTimer > 0 then
+		self.monsterStepTimer = self.monsterStepTimer - dt
+
+		if self.monsterStepTimer <= 0 then
+			monster:setState(Constants.MONSTER_STATES.IDLE)
+		end
+	end
+
 	if input:released("pause") then
 		Signal.emit("pause")
 	end
@@ -151,12 +162,14 @@ function play:playerTurn(dt)
 			moveDirection = nil
 			moveDirectionText = nil
 			self:shiftAttention()
+			print(map.grid:getEntityCell(self.visibleEntity))
 			map.grid:setVisibility(map.grid:getEntityCell(self.visibleEntity))
 			ability = nil
 		else
 			if moveDirection and self.visibleEntity == Constants.ENTITY_IDS.PLAYER then
 				local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.PLAYER)
-				local moved = map.grid:moveEntity(moveDirection, entityCell)
+				local move = self:getMoveIndex(moveDirection, entityCell)
+				local moved = map.grid:moveEntity(move, entityCell, Constants.ENTITY_IDS.PLAYER)
 				if moved then
 					player:setState(Constants.PLAYER_STATES.WALKING)
 					self.playerStepTimer = self.playerStepDuration
@@ -174,10 +187,32 @@ function play:playerTurn(dt)
 end
 
 function play:monsterTurn()
-	monster:track()
-	if input:released("next") then
+	local move = monster:track()
+	local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.MONSTER)
+	local moved = map.grid:moveEntity(move.i, entityCell, Constants.ENTITY_IDS.MONSTER)
+	if moved then
+		monster:setState(Constants.MONSTER_STATES.TRACK)
+		self.monsterStepTimer = self.monsterStepDuration
+	end
+
+	if moved then
 		turn = Constants.TURNS.PLAYERTURN
 	end
+	moved = nil
+end
+
+function play:getMoveIndex(d, i)
+	local target
+	if d == Constants.DIRECTION_VECTORS.RIGHT then
+		target = i + 1
+	elseif d == Constants.DIRECTION_VECTORS.LEFT then
+		target = i - 1
+	elseif d == Constants.DIRECTION_VECTORS.UP then
+		target = i - map.grid.width
+	else
+		target = i + map.grid.width
+	end
+	return target
 end
 
 function play:shiftAttention()
