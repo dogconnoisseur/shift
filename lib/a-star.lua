@@ -52,7 +52,7 @@ function AStar:get_nodes_from_grid(grid, width, height)
 	for y = 1, height do
 		for x = 1, width do
 			local coords = self.get_1d_coords_from_2d(x, y, width)
-			table.insert(nodes, { x = x, y = y, i = coords, d = grid[coords] })
+			table.insert(nodes, { x = x, y = y, i = coords, d = grid.grid[coords] })
 		end
 	end
 	return nodes
@@ -77,7 +77,7 @@ end
 function AStar:is_valid_node(node, neighbor)
 	local inBounds = neighbor.x > 0 and neighbor.x < self.width and neighbor.y > 0 and neighbor.y < self.height
 
-	return inBounds and self:is_neighbor(node, neighbor)
+	return inBounds and self:is_neighbor(node, neighbor) and neighbor.d ~= 3
 end
 
 function AStar:is_neighbor(node, neighbor)

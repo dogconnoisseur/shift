@@ -4,6 +4,7 @@ local Constants = require("src.utils.constants")
 local Helpers = require("src.utils.helpers")
 local Player = require("src.entities.player")
 local Monster = require("src.entities.monster")
+local Wall = require("src.entities.wall")
 local Map = require("src.map")
 local level1 = require("src.levels.level_1")
 
@@ -59,12 +60,17 @@ function play:enter()
 	}
 	local monsterSprite =
 		{ [Constants.MONSTER_STATES.IDLE] = { spriteSheet = monsterIdleSheet, quads = monsterIdleQuads } }
+
 	player = Player:new(playerSprite)
 	monster = Monster:new(monsterSprite)
-
+	local wall = Wall:new()
 	self.visibleEntity = Constants.ENTITY_IDS.PLAYER
 
-	local entities = { [Constants.ENTITY_IDS.PLAYER] = player, [Constants.ENTITY_IDS.MONSTER] = monster }
+	local entities = {
+		[Constants.ENTITY_IDS.PLAYER] = player,
+		[Constants.ENTITY_IDS.MONSTER] = monster,
+		[Constants.ENTITY_IDS.WALL] = wall,
+	}
 	map = Map:new()
 	map:init(
 		level1.width,

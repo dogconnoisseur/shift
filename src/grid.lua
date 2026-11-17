@@ -120,10 +120,8 @@ function Grid:isValidMoveCell(start, target)
 	target = target - 1
 	return target >= 0
 		and target < self.width * self.height
-		and (
-			math.floor(start / self.width) == math.floor(target / self.width)
-			or start % self.width == target % self.width
-		)
+		and (math.floor(start / self.width) == math.floor(target / self.width) or start % self.width == target % self.width)
+		and self.grid[target + 1] ~= 3
 end
 
 function Grid:setVisibility(i, show)

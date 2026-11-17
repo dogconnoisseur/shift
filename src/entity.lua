@@ -11,10 +11,12 @@ function Entity.new(self, name, sprite, initialState)
 	instance.name = name
 	instance.sight = nil
 	instance.position = vector(400, 400)
-	instance.sprite = sprite
-	instance.state = initialState
-	-- instance.spriteSheet = sprite.spriteSheet
-	-- instance.quads = sprite.idleQuads
+	if sprite then
+		instance.sprite = sprite
+	end
+	if initialState then
+		instance.state = initialState
+	end
 	instance.currentFrame = 1
 	instance.animTimer = 0
 	instance.frameDuration = 0.5

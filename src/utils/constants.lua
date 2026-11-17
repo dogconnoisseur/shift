@@ -8,6 +8,7 @@ local TURNS = {
 local ENTITIES = {
 	PLAYER = "PLAYER",
 	MONSTER = "MONSTER",
+	WALL = "WALL",
 }
 
 local CELL_DIMENSIONS = {
@@ -51,6 +52,7 @@ local DIRECTION_VECTORS = {
 local ENTITY_IDS = {
 	PLAYER = 1,
 	MONSTER = 2,
+	WALL = 3,
 }
 
 local ENTITY_DIRECTION_IDS = {
