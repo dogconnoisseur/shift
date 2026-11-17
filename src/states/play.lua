@@ -187,11 +187,12 @@ function play:playerTurn(dt)
 end
 
 function play:monsterTurn()
-	local move = monster:track()
+	monster:setState(Constants.MONSTER_STATES.TRACK)
+
+	local move = monster:move()
 	local entityCell = map.grid:getEntityCell(Constants.ENTITY_IDS.MONSTER)
 	local moved = map.grid:moveEntity(move.i, entityCell, Constants.ENTITY_IDS.MONSTER)
 	if moved then
-		monster:setState(Constants.MONSTER_STATES.TRACK)
 		self.monsterStepTimer = self.monsterStepDuration
 	end
 

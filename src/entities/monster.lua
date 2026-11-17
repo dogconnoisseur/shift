@@ -22,13 +22,14 @@ function Monster:init(grid, width, height)
 	self.positon = self.grid:getPosition(Constants.ENTITY_IDS.MONSTER)
 end
 
-function Monster:move(target)
+function Monster:move()
 	local node
 	if self.state == Constants.MONSTER_STATES.TRACK then
 		node = self:track()
 	end
 
-	return node.i
+	self:setDirectionFacing(node.i)
+	return node
 end
 
 function Monster:track()
@@ -40,6 +41,18 @@ function Monster:track()
 	local path = self.aStar:a_star(monsterNode, playerNode, self.aStar.nodes)
 	if path then
 		return path[2]
+	end
+end
+
+function Monster:setDirectionFacing(target)
+	if target - self.position == 1 then
+		self:setFacing(Constants.ENTITY_DIRECTION_IDS.RIGHT)
+	elseif target - self.position == -1 then
+		self:setFacing(Constants.ENTITY_DIRECTION_IDS.LEFT)
+	elseif target - self.grid.width == self.position then
+		self:setFacing(Constants.ENTITY_DIRECTION_IDS.DOWN)
+	else
+		self:setFacing(Constants.ENTITY_DIRECTION_IDS.UP)
 	end
 end
 

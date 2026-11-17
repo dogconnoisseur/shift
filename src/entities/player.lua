@@ -12,6 +12,4 @@ function Player:new(sprite)
 	return instance
 end
 
-function Player:moveToGrid(targetX, targetY) end
-
 return Player
