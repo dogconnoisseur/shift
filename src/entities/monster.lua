@@ -44,9 +44,6 @@ function Monster:track()
 end
 
 function Monster:getNodeFromGrid(i)
-	-- local x = i % self.gridWidth + 1
-	-- local y = math.floor(i / self.gridWidth)
-	-- return self.aStar.nodes[x][y]
 	return self.aStar.nodes[i]
 end
 
