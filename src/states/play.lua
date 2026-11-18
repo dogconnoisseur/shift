@@ -87,6 +87,10 @@ function play:update(dt)
 	player:update(dt)
 	monster:update(dt)
 
+	if map.grid.monsterIndex == map.grid.playerIndex then
+		Signal.emit("gameover")
+	end
+
 	input:update()
 	if turn == Constants.TURNS.PLAYERTURN then
 		self:playerTurn(dt)
@@ -168,7 +172,6 @@ function play:playerTurn(dt)
 			moveDirection = nil
 			moveDirectionText = nil
 			self:shiftAttention()
-			print(map.grid:getEntityCell(self.visibleEntity))
 			map.grid:setVisibility(map.grid:getEntityCell(self.visibleEntity))
 			ability = nil
 		else

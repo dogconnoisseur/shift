@@ -31,6 +31,16 @@ function Grid.init(self)
 	self.fogGrid[playeri] = 1
 	self:setVisibility(playeri)
 	self.prevVisible = self:getVisibleCells(playeri, self.visibleRadius)
+
+	for i, v in ipairs(self.grid) do
+		if v == Constants.ENTITY_IDS.MONSTER then
+			self.monsterIndex = i
+		else
+			if v == Constants.ENTITY_IDS.PLAYER then
+				self.playerIndex = i
+			end
+		end
+	end
 end
 
 function Grid:isEmpty() end
@@ -109,6 +119,9 @@ function Grid:moveEntity(target, i, entityID)
 		if entityID == Constants.ENTITY_IDS.PLAYER then
 			self.fogGrid[target] = entity
 			self:setVisibility(target)
+			self.playerIndex = target
+		elseif entityID == Constants.ENTITY_IDS.MONSTER then
+			self.monsterIndex = target
 		end
 		return target
 	end
